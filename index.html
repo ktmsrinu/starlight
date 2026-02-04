@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Harshini ❤️</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+font-family:'Georgia','Segoe UI',sans-serif;
+background:linear-gradient(135deg,#ffeef8,#ffd4e8,#e8d4ff,#ffeef8);
+background-size:400% 400%;
+animation:gradientShift 15s ease infinite;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+@keyframes gradientShift{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+/* INTRO */
+#musicIntro{
+position:fixed;
+inset:0;
+background:linear-gradient(135deg,#ffb5d8,#c9a0ff);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:1000;
+transition:opacity 1s,visibility 1s;
+}
+
+#musicIntro.hidden{opacity:0;visibility:hidden}
+
+.intro-card{
+background:#fff;
+padding:60px 70px;
+border-radius:30px;
+text-align:center;
+box-shadow:0 20px 60px rgba(255,105,180,.35);
+}
+
+.intro-card h1{font-size:3rem;color:#ff69b4}
+.intro-emojis{font-size:2.5rem;margin:25px 0}
+
+button{
+border:none;
+cursor:pointer;
+border-radius:50px;
+padding:18px 45px;
+font-size:1.2rem;
+transition:.3s;
+}
+
+#playMusicBtn,#yesBtn{
+background:linear-gradient(135deg,#ff69b4,#ff1493);
+color:#fff;
+box-shadow:0 8px 25px rgba(255,105,180,.5);
+}
+
+#playMusicBtn:hover,#yesBtn:hover{
+transform:translateY(-3px) scale(1.05);
+}
+
+#noBtn{
+background:#fff;
+border:2px solid #ddd;
+color:#777;
+}
+
+/* MAIN */
+#mainContent{
+opacity:0;
+visibility:hidden;
+transition:1.5s;
+display:flex;
+align-items:center;
+justify-content:center;
+min-height:100vh;
+}
+
+#mainContent.visible{opacity:1;visibility:visible}
+
+.valentine-card{
+background:#fff;
+padding:60px 45px;
+border-radius:30px;
+text-align:center;
+box-shadow:0 20px 60px rgba(0,0,0,.15);
+max-width:500px;
+}
+
+.valentine-card h2{font-size:2.4rem;color:#ff69b4}
+.valentine-card p{font-size:1.5rem;margin:25px 0;color:#555}
+
+.button-container{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+
+/* OVERLAY */
+#romanticOverlay{
+position:fixed;
+inset:0;
+background:linear-gradient(135deg,rgba(255,105,180,.95),rgba(255,20,147,.95));
+display:none;
+align-items:center;
+justify-content:center;
+z-index:2000;
+}
+
+#romanticOverlay.show{display:flex}
+
+.romantic-message{
+background:#fff;
+padding:60px 45px;
+border-radius:30px;
+text-align:center;
+max-width:650px;
+box-shadow:0 30px 80px rgba(0,0,0,.35);
+}
+
+.romantic-message p{
+font-size:1.8rem;
+line-height:1.7;
+color:#333;
+}
+
+/* SONG CARDS */
+#songCardsContainer{
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:1;
+}
+
+.song-card{
+position:absolute;
+background:#1a1a1a;
+color:#fff;
+padding:15px 20px;
+border-radius:12px;
+opacity:0;
+animation:floatUp linear infinite;
+}
+
+@keyframes floatUp{
+0%{opacity:0;transform:translateY(0)}
+10%{opacity:.9}
+90%{opacity:.9}
+100%{opacity:0;transform:translateY(-110vh)}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" preload="auto" loop>
+  <source src="beautifulgirl-co1.mp3" type="audio/mpeg">
+</audio>
+
+<div id="musicIntro">
+<div class="intro-card">
+<h1>Harshini ❤️
+  <br><br>Is this you?
+</h1>
+<div class="intro-emojis">🎶 💖 ✨</div>
+<button id="playMusicBtn">▶ YES</button>
+</div>
+</div>
+
+<div id="songCardsContainer"></div>
+
+<div id="mainContent">
+<div class="valentine-card">
+<h2>Harshini ❤️</h2>
+<p>Will you be my Valentine?</p>
+<div class="button-container">
+<button id="yesBtn">YES 💕</button>
+<button id="noBtn">NO 🙃</button>
+</div>
+</div>
+</div>
+
+<div id="romanticOverlay">
+<div class="romantic-message">
+<p>
+I love you ❤️  
+<br><br>
+I was smiling before, but now  
+<br>
+I can't stop
+</p>
+</div>
+</div>
+<script>
+const bgMusic = document.getElementById("bgMusic");
+const musicIntro = document.getElementById("musicIntro");
+const mainContent = document.getElementById("mainContent");
+const romanticOverlay = document.getElementById("romanticOverlay");
+const noBtn = document.getElementById("noBtn");
+const container = document.getElementById("songCardsContainer");
+
+/* SONG LIST (HTML ONLY, NO BACKEND) */
+const songs = [
+  { title: "Thanu", movie: "HIT 3", file: "thanu-hit3.mp3" },
+  { title: "Preminche Premava", movie: "Nuvvu Nenu Prema", file: "preminche-premava.mp3" },
+  { title: "Manasu Maree", movie: "V", file: "manasu-maree.mp3" },
+  { title: "Jaamu Rathiri", movie: "Kshana-Kshanam", file: "02 Jaamu Rathiri - SenSongsMp3.co.mp3" },
+  { title: "Ninnu Kori", movie: "Gharshana", file: "03 -Nini Kori [www.SenSongsMp3.co].mp3" },
+  { title: "Vayyarala", movie: "Teenmaar", file: "vayyarala.mp3" }
+];
+
+/* PLAY MUSIC BUTTON */
+document.getElementById("playMusicBtn").onclick = () => {
+  bgMusic.play().catch(()=>alert("MP3 must be in same folder"));
+  musicIntro.classList.add("hidden");
+  setTimeout(()=>mainContent.classList.add("visible"),1000);
+  startCards();
+};
+
+/* YES BUTTON */
+document.getElementById("yesBtn").onclick = () => {
+  romanticOverlay.classList.add("show");
+};
+
+/* NO BUTTON RUN AWAY */
+noBtn.onmouseenter = () => {
+  noBtn.style.position = "fixed";
+  noBtn.style.left = Math.random()*(window.innerWidth-120)+"px";
+  noBtn.style.top = Math.random()*(window.innerHeight-60)+"px";
+};
+
+/* FLOATING CLICKABLE SONG CARDS */
+function startCards(){
+  setInterval(()=>{
+    const s = songs[Math.floor(Math.random()*songs.length)];
+    const card = document.createElement("div");
+    card.className = "song-card";
+    card.style.pointerEvents = "auto";
+    card.style.cursor = "pointer";
+
+    card.innerHTML = `
+      🎵 <b>${s.title}</b><br>
+      <small>${s.movie}</small>
+    `;
+
+    card.style.left = Math.random()*(window.innerWidth-220)+"px";
+    card.style.bottom = "-120px";
+    card.style.animationDuration = (10 + Math.random()*6) + "s";
+
+    /* CLICK → PLAY THAT SONG */
+    card.onclick = () => {
+      bgMusic.pause();
+      bgMusic.src = s.file;
+      bgMusic.currentTime = 0;
+      bgMusic.play();
+
+      card.style.background = "#ff1493";
+      card.style.transform = "scale(1.1)";
+    };
+
+    container.appendChild(card);
+    setTimeout(()=>card.remove(),16000);
+  },1500);
+}
+</script>
+</body>
+</html>
+
+</body>
+</html>
